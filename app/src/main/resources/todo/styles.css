@@ -1,0 +1,4 @@
+/* Esto aplica el tamaño de fuente a todos los componentes hijos */
+.root {
+    -fx-font-size: 18px;
+}
