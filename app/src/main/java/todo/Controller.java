@@ -1,8 +1,5 @@
 package todo;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -32,6 +29,8 @@ public class Controller {
     @FXML
     private TextField txtInput;
 
+    private final NotaItemService notaItemService = new NotaItemService();
+
     @FXML
     private void initialize() {
         columnFecha.setCellValueFactory(new PropertyValueFactory<>("fechaHora"));
@@ -40,18 +39,12 @@ public class Controller {
 
     @FXML
     void handleAgregar(ActionEvent event) {
-        String item = txtInput.getText().trim();
-        if (!item.isEmpty()) {
-            // Generar fecha y hora actual
-            LocalDateTime ahora = LocalDateTime.now();
-            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-            String fechaHoraFormateada = ahora.format(formato);
-
-            // 4. Creamos el objeto NotaItem en lugar de pasar un String suelto
-            NotaItem nuevaNota = new NotaItem(item, fechaHoraFormateada);
-            
-            TableViewItems.getItems().add(0, nuevaNota);
+        try {
+            var nuevaNota = notaItemService.crearNota(txtInput.getText());
+            TableViewItems.getItems().add(0,nuevaNota);
             txtInput.clear();
+        } catch (IllegalArgumentException e) {
+            // TODO: handle exception
         }
     }
 
