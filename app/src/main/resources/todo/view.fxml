@@ -17,12 +17,12 @@
                   <Insets />
                </HBox.margin>
             </TextField>
-            <Button fx:id="btnAgregar" mnemonicParsing="false" onAction="#handleAgregar" prefHeight="31.0" prefWidth="100.0" text="Agregar">
+            <Button fx:id="btnAgregar" mnemonicParsing="false" onAction="#handleAgregar" prefHeight="46.0" prefWidth="149.0" text="Agregar">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
             </Button>
-            <Button fx:id="btnEliminar" mnemonicParsing="false" onAction="#handleEliminar" text="Eliminar" />
+            <Button fx:id="btnEliminar" mnemonicParsing="false" onAction="#handleEliminar" prefHeight="46.0" prefWidth="149.0" text="Eliminar" />
          </children>
          <padding>
             <Insets top="10.0" />

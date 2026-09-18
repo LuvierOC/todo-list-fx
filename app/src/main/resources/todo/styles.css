@@ -1,4 +1,100 @@
-/* Esto aplica el tamaño de fuente a todos los componentes hijos */
+/* --- CONFIGURACIÓN GLOBAL --- */
 .root {
-    -fx-font-size: 18px;
+    -fx-font-size: 20px; /* Un poco más equilibrado para una app de escritorio moderna */
+    -fx-base: #1e1e1e;
+    -fx-background: #121212;
+}
+
+/* --- VENTANA PRINCIPAL (BorderPane) --- */
+.border-pane {
+    -fx-background-color: #121212;
+}
+
+/* --- CAMPO DE TEXTO (TextField) --- */
+.text-field {
+    -fx-background-color: #1e1e1e;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #757575;
+    -fx-background-radius: 8px;
+    -fx-border-color: #333333;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-padding: 8px 12px;
+}
+
+.text-field:focused {
+    -fx-border-color: #3b82f6; /* Azul moderno al enfocar */
+    -fx-background-color: #242424;
+}
+
+/* --- TABLA DE NOTAS (TableView) --- */
+.table-view {
+    -fx-background-color: #1a1a1a;
+    -fx-table-cell-border-color: #2a2a2a;
+    -fx-background-radius: 8px;
+    -fx-border-color: #2a2a2a;
+    -fx-border-radius: 8px;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #242424;
+    -fx-background-radius: 8px 8px 0 0;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #b0b0b0;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: #1a1a1a;
+    -fx-text-fill: #e0e0e0;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #161616; /* Filas alternas sutiles */
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #2d3748; /* Color de selección moderno */
+    -fx-text-fill: #ffffff;
+}
+
+.table-cell {
+    -fx-text-fill: #e0e0e0;
+    -fx-padding: 10px;
+}
+
+/* --- BOTONES GENERALES --- */
+.button {
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+    -fx-transition: 0.2s;
+}
+
+/* Botón Agregar (Color Verde Moderno/Éxito) */
+#btnAgregar {
+    -fx-background-color: #10b981;
+    -fx-text-fill: white;
+}
+
+#btnAgregar:hover {
+    -fx-background-color: #059669;
+}
+
+/* Botón Eliminar (Color Rojo/Alerta) */
+#btnEliminar {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+}
+
+#btnEliminar:hover {
+    -fx-background-color: #dc2626;
 }
