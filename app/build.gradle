@@ -19,19 +19,10 @@ repositories {
 
 // Configuración de JavaFX
 javafx {
-    version = '21' // O la versión que prefieras (ej. 17, 22)
+    version = '21.0.2' // O la versión que prefieras (ej. 17, 22)
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
-dependencies {
-    // Use JUnit Jupiter for testing.
-    testImplementation libs.junit.jupiter
-
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    // This dependency is used by the application.
-    implementation libs.guava
-}
 
 // Apply a specific Java toolchain to ease working on different environments.
 java {
@@ -42,10 +33,15 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'todo.App'
+    mainClass = 'todo.Main'
 }
 
-tasks.named('test') {
-    // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
+jar {
+    manifest {
+        attributes 'Main-Class': 'todo.Main'
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
