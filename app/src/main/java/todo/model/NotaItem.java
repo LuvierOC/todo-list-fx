@@ -1,4 +1,4 @@
-package todo;
+package todo.model;
 
 public class NotaItem {
     private String texto;

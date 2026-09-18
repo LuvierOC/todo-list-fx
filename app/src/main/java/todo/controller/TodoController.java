@@ -1,4 +1,4 @@
-package todo;
+package todo.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,8 +7,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import todo.model.NotaItem;
+import todo.service.NotaItemService;
 
-public class Controller {
+public class TodoController {
     @FXML
     private Button btnAgregar;
 
@@ -52,6 +54,7 @@ public class Controller {
     void handleEliminar(ActionEvent event) {
         NotaItem selectedItem = TableViewItems.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
+            notaItemService.eliminarNota(selectedItem);
             TableViewItems.getItems().remove(selectedItem);
         }
     }
