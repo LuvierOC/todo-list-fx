@@ -39,6 +39,32 @@ public class TodoController {
     private void initialize() {
         columnFecha.setCellValueFactory(new PropertyValueFactory<>("fechaHora"));
         columnNombre.setCellValueFactory(new PropertyValueFactory<>("texto"));
+        
+        txtInput.addEventFilter(KeyEvent.KEY_PRESSED, this::enfocarTableView);
+    }
+
+    private void enfocarTableView(KeyEvent event) {
+        
+        if (event.getCode() != KeyCode.TAB) {
+        return;
+        }
+        
+        if (TableViewItems.getItems().isEmpty()) {
+            return;
+        }
+
+        event.consume();
+
+        TableViewItems.requestFocus();
+
+        int selectedIndex = TableViewItems.getSelectionModel().getSelectedIndex();
+
+        if (selectedIndex == -1) {
+            selectedIndex = 0;
+            TableViewItems.getSelectionModel().select(selectedIndex);
+        }
+
+        TableViewItems.getFocusModel().focus(selectedIndex);
     }
 
     private void agregar(){
