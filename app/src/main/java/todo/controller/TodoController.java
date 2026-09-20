@@ -146,4 +146,30 @@ public class TodoController {
             eliminar();
         }
     }
+
+
+    @FXML
+    void actionBuscar(ActionEvent event) {
+        if (!checkNota.isSelected() && !checkTag.isSelected()) {
+            System.out.println("seleccione una opcion");
+        }
+        
+        if (checkNota.isSelected()) {
+            var nota = txtNota.getText().trim();
+            if (!nota.isBlank()) {
+                System.out.println("Se esta buscando a traves de la nota:" + nota);
+            }else{
+                System.out.println("no hay nada que buscar en nota");
+            }
+        }
+
+        if (checkTag.isSelected()) {
+            var tag = txtTags.getText().trim();
+            if (!tag.isBlank()) {
+                System.out.println("Se esta buscando a traves del tag:" + tag);
+            }else{
+                System.out.println("no hay nada que buscar en tag");
+            }
+        }
+    }
 }
