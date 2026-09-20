@@ -17,6 +17,9 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    implementation 'org.xerial:sqlite-jdbc:3.49.1.0'
+}
 // Configuración de JavaFX
 javafx {
     version = '21.0.2' // O la versión que prefieras (ej. 17, 22)
