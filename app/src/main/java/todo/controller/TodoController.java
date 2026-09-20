@@ -3,6 +3,7 @@ package todo.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -33,6 +34,18 @@ public class TodoController {
     @FXML
     private TextField txtInput;
 
+    @FXML
+    private CheckBox checkNota;
+
+    @FXML
+    private CheckBox checkTag;
+
+        @FXML
+    private TextField txtNota;
+
+    @FXML
+    private TextField txtTags;
+
     private final NotaItemService notaItemService = new NotaItemService();
 
     @FXML
@@ -41,6 +54,29 @@ public class TodoController {
         columnNombre.setCellValueFactory(new PropertyValueFactory<>("texto"));
         
         txtInput.addEventFilter(KeyEvent.KEY_PRESSED, this::enfocarTableView);
+        checkNota.setOnAction(this::manejarSeleccion);
+        checkTag.setOnAction(this::manejarSeleccion);
+    }
+
+    private void manejarSeleccion(ActionEvent event){
+        CheckBox checkPresionado = (CheckBox) event.getSource();
+
+        if (checkPresionado.isSelected()) {
+            if (checkPresionado == checkNota) {
+                checkTag.setSelected(false);
+                txtTags.setDisable(true);
+                txtNota.setDisable(false);
+            }else if (checkPresionado == checkTag) {
+                checkNota.setSelected(false);
+                txtNota.setDisable(true);
+                txtTags.setDisable(false);
+            }
+            
+        }else{
+            txtNota.setDisable(true);
+            txtTags.setDisable(true);
+        }
+
     }
 
     private void enfocarTableView(KeyEvent event) {
