@@ -1,8 +1,8 @@
 /* --- CONFIGURACIÓN GLOBAL --- */
 .root {
     -fx-font-size: 20px; /* Un poco más equilibrado para una app de escritorio moderna */
-    -fx-base: #1e1e1e;
-    -fx-background: #121212;
+    -fx-base: #232323;
+    -fx-background: #222222;
 }
 
 /* --- VENTANA PRINCIPAL (BorderPane) --- */
@@ -97,4 +97,9 @@
 
 #btnEliminar:hover {
     -fx-background-color: #dc2626;
+}
+
+#labelTitulo {
+    -fx-text-fill: #af2929;
+    -fx-font-weight: bold;
 }
