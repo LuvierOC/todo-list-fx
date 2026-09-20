@@ -6,15 +6,28 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class NotaItem {
+    private Long id;
     private String texto;
     private List<String> tags;
     private String fechaHora;
 
-
-    public NotaItem(String texto, String fechaHora) {
+    public NotaItem(String texto, String fechaHora){
+        this(null, texto, fechaHora);
+    }
+    
+    public NotaItem(Long id, String texto, String fechaHora) {
+        this.id = id;
         this.texto = texto;
         this.fechaHora = fechaHora;
         this.tags = new ArrayList<>();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFechaHora() {
