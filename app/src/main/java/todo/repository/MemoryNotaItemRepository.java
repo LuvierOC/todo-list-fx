@@ -5,7 +5,7 @@ import java.util.List;
 
 import todo.model.NotaItem;
 
-public class MemoryNotaItemRepository implements NotaItemRepository{
+public class MemoryNotaItemRepository implements INotaItemRepository{
 
     private final List<NotaItem> notas = new ArrayList<>();
 
