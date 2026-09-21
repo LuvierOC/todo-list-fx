@@ -26,7 +26,7 @@ public class SqliteNotaRepository implements INotaItemRepository {
                     "No se puede actualizar una nota sin id. Usa guardar() para insertarla.");
         }
         String sql = """
-                INSERT INTO notas (texto, fecha_hora)
+                INSERT INTO notas (nombre_nota, fecha_hora)
                 VALUES (?, ?)
                 """;
         try (Connection conn = SqliteConector.conectar()) {
@@ -35,7 +35,7 @@ public class SqliteNotaRepository implements INotaItemRepository {
             try (PreparedStatement stmt =
                     conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 
-                stmt.setString(1, nota.getTexto());
+                stmt.setString(1, nota.getNombreNota());
                 stmt.setString(2, nota.getFechaHora());
                 stmt.executeUpdate();
 
@@ -58,13 +58,14 @@ public class SqliteNotaRepository implements INotaItemRepository {
             throw new IllegalArgumentException(
                     "No se puede actualizar una nota sin id. Usa guardar() para insertarla.");
         }
-        String sql = "UPDATE notas SET texto = ?, fecha_hora = ? WHERE id = ?";
+        String sql = "UPDATE notas SET nombre_nota = ?, descripcion = ?, fecha_hora = ? WHERE id = ?";
         try (Connection conn = SqliteConector.conectar()) {
             conn.setAutoCommit(false);
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, nota.getTexto());
+                stmt.setString(1, nota.getNombreNota());
                 stmt.setString(2, nota.getFechaHora());
-                stmt.setLong(3, nota.getId());
+                stmt.setString(3, nota.getDescripcion());
+                stmt.setLong(4, nota.getId());
                 stmt.executeUpdate();
             }
             // Los tags pueden haber cambiado: se desvinculan todos y se vuelven a vincular
@@ -150,7 +151,7 @@ public class SqliteNotaRepository implements INotaItemRepository {
     public List<NotaItem> obtenertodos() {
         // Una sola consulta trae las notas y sus tags agregados (GROUP_CONCAT)
         String sql = """
-                SELECT n.id, n.texto, n.fecha_hora,
+                SELECT n.id, n.nombre_nota, n.descripcion, n.fecha_hora,
                        GROUP_CONCAT(t.nombre, ',') AS tags
                 FROM notas n
                 LEFT JOIN nota_tags nt ON nt.nota_id = n.id
@@ -166,7 +167,8 @@ public class SqliteNotaRepository implements INotaItemRepository {
             while (rs.next()) {
                 NotaItem nota = new NotaItem(
                         rs.getLong("id"),
-                        rs.getString("texto"),
+                        rs.getString("nombre_nota"),
+                        rs.getString("descripcion"),
                         rs.getString("fecha_hora"));
                 nota.setTags(parsearTags(rs.getString("tags")));
                 notas.add(nota);
