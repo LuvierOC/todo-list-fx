@@ -70,9 +70,9 @@
                   <Label text="tag" GridPane.rowIndex="1" />
                   <TextField fx:id="txtNota" prefHeight="43.0" prefWidth="218.0" GridPane.columnIndex="1" />
                   <TextField fx:id="txtTags" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <CheckBox fx:id="checkNota" mnemonicParsing="false" selected="true" GridPane.columnIndex="2" />
-                  <CheckBox fx:id="checkTag" mnemonicParsing="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <Button mnemonicParsing="false" onAction="#actionBuscar" text="Buscar" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <CheckBox fx:id="checkNota" focusTraversable="false" mnemonicParsing="false" selected="true" GridPane.columnIndex="2" />
+                  <CheckBox fx:id="checkTag" focusTraversable="false" mnemonicParsing="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#actionBuscar" text="Buscar" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </children>
