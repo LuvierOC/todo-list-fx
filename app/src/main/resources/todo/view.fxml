@@ -42,7 +42,7 @@
       <TableView fx:id="TableViewItems" onKeyPressed="#eliminarNotaKey" prefHeight="348.0" prefWidth="680.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="columnNombre" prefWidth="266.3999752998352" text="Nombre" />
-            <TableColumn prefWidth="164.0" text="Tags" />
+            <TableColumn fx:id="columnTags" prefWidth="164.0" text="Tags" />
           <TableColumn fx:id="columnFecha" minWidth="100.0" prefWidth="275.199951171875" text="Fecha" />
         </columns>
          <columnResizePolicy>

@@ -33,7 +33,7 @@ public class NotaController {
     public void setNota(NotaItem nota){
         txtNota.setText(nota.getNombreNota());
         txtTags.setText(nota.getCadenaTags());
-        if (nota.getDescripcion() == null | nota.getDescripcion().isEmpty()) {
+        if (nota.getDescripcion() == null || nota.getDescripcion().isEmpty()) {
             areaDesc.setText("# " + nota.getNombreNota());
         }else{
             areaDesc.setText(nota.getDescripcion());

@@ -2,6 +2,7 @@ package todo.controller;
 
 import java.io.IOException;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +13,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -36,6 +36,8 @@ public class TodoController {
     @FXML
     private TableColumn<NotaItem, String> columnNombre;
 
+    @FXML
+    private TableColumn<NotaItem, String> columnTags;
 
     @FXML
     private TextField txtInput;
@@ -56,8 +58,9 @@ public class TodoController {
 
     @FXML
     private void initialize() {
-        columnFecha.setCellValueFactory(new PropertyValueFactory<>("fechaHora"));
-        columnNombre.setCellValueFactory(new PropertyValueFactory<>("texto"));
+        columnFecha.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFechaHora()));
+        columnNombre.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombreNota()));
+        columnTags.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCadenaTags()));
         
         txtInput.addEventFilter(KeyEvent.KEY_PRESSED, this::enfocarTableView);
         checkNota.setOnAction(this::manejarSeleccion);
