@@ -1,7 +1,12 @@
 package todo.controller;
 
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
@@ -10,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 import todo.model.NotaItem;
 import todo.service.NotaItemService;
 
@@ -56,6 +62,8 @@ public class TodoController {
         txtInput.addEventFilter(KeyEvent.KEY_PRESSED, this::enfocarTableView);
         checkNota.setOnAction(this::manejarSeleccion);
         checkTag.setOnAction(this::manejarSeleccion);
+
+        TableViewItems.setOnKeyPressed(this::abrirNotaConEnter);
     }
 
     private void manejarSeleccion(ActionEvent event){
@@ -120,6 +128,50 @@ public class TodoController {
             TableViewItems.getItems().remove(selectedItem);
         }else{
             System.out.println("no hay ninguna nota que eliminar");
+        }
+    }
+
+    private void abrirNotaConEnter(KeyEvent event){
+        if (event.getCode() != KeyCode.ENTER) {
+            return;
+        }
+
+        NotaItem nota = TableViewItems.getSelectionModel().getSelectedItem();
+
+        /// no es necesario hacer un llamado a base de datos para obterner los datos
+        if (nota != null) {
+            abrirNota(nota);
+        }
+
+        event.consume();
+    }
+
+    private void abrirNota(NotaItem nota) {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/todo/view2.fxml")
+            );
+
+            Parent root = loader.load();
+
+            // Obtener el controlador de la nueva ventana
+            NotaController controller = loader.getController();
+
+            // Pasarle la nota seleccionada
+            controller.setNota(nota);
+
+            // Crear nueva ventana
+            Stage stage = new Stage();
+
+            stage.setTitle("Editar nota");
+            stage.setScene(new Scene(root));
+
+            // Mostrar sin cerrar la ventana actual
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
