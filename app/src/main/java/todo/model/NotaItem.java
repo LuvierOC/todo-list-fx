@@ -7,17 +7,26 @@ import java.util.regex.Pattern;
 
 public class NotaItem {
     private Long id;
-    private String texto;
+    private String nombreNota;
     private List<String> tags;
+    private String descripcion;
     private String fechaHora;
 
-    public NotaItem(String texto, String fechaHora){
-        this(null, texto, fechaHora);
+    public NotaItem(String nombreNota, String fechaHora){
+        this(null, nombreNota, fechaHora);
     }
     
-    public NotaItem(Long id, String texto, String fechaHora) {
+    public NotaItem(Long id, String nombreNota, String fechaHora) {
         this.id = id;
-        this.texto = texto;
+        this.nombreNota = nombreNota;
+        this.fechaHora = fechaHora;
+        this.tags = new ArrayList<>();
+    }
+
+    public NotaItem(Long id, String nombreNota, String descripcion, String fechaHora) {
+        this.id = id;
+        this.nombreNota = nombreNota;
+        this.descripcion = descripcion;
         this.fechaHora = fechaHora;
         this.tags = new ArrayList<>();
     }
@@ -33,12 +42,20 @@ public class NotaItem {
     public String getFechaHora() {
         return fechaHora;
     }
-    public String getTexto() {
-        return texto;
+    public String getNombreNota() {
+        return nombreNota;
     }
 
     public List<String> getTags() {
         return tags;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    
+    public String getDescripcion() {
+        return descripcion;
     }
 
     public void addTags(String cadenaTags){
@@ -54,6 +71,16 @@ public class NotaItem {
                 this.tags.add(tagEncontrado);
             }
         }
+    }
+
+    public String getCadenaTags(){
+        var listaTags = this.getTags();
+        String cadenaTags = "#";
+        for (String tag : listaTags) {
+            cadenaTags = cadenaTags + tag;
+            cadenaTags = " #" + cadenaTags;
+        }
+        return cadenaTags;
     }
 
     public void setTags(List<String> tags) {
