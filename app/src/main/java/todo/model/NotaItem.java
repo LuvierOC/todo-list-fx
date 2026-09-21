@@ -37,6 +37,10 @@ public class NotaItem {
         return texto;
     }
 
+    public List<String> getTags() {
+        return tags;
+    }
+
     public void addTags(String cadenaTags){
         if (cadenaTags == null || cadenaTags.isEmpty()){
             return;

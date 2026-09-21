@@ -15,6 +15,19 @@ public class MemoryNotaItemRepository implements INotaItemRepository{
     }
 
     @Override
+    public void actualizar(NotaItem nota) {
+        if (nota.getId() == null) {
+            return;
+        }
+        for (int i = 0; i < notas.size(); i++) {
+            if (nota.getId().equals(notas.get(i).getId())) {
+                notas.set(i, nota);
+                return;
+            }
+        }
+    }
+    
+    @Override
     public void eliminar(NotaItem nota) {
         notas.remove(nota);
     }
