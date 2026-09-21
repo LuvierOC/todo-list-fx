@@ -1,50 +1,58 @@
 package todo.db;
 
-import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
-public class SqliteConector {
-    private static  final String URL =
-     System.getProperty("todo.db.url", "jdbc:sqlite:todo:db");
+public final class SqliteConector {
 
-    private SqliteConector () {
-        
+    private static final String URL =
+            System.getProperty("todo.db.url", "jdbc:sqlite:todo.db");
+
+    private SqliteConector() {
     }
 
-    public static Connection conectar() throws SQLException{
-        return DriverManager.getConnection(URL);
+    public static Connection conectar() throws SQLException {
+        Connection conn = DriverManager.getConnection(URL);
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute("PRAGMA foreign_keys = ON");
+        }
+        return conn;
     }
 
-    public static void crearTablaSiNoExiste(){
-        String sql = """
-                CREATE TABLE IF NOT EXISTS notas(
+    public static void crearTablaSiNoExiste() {
+        String[] crearTablas = {
+                """
+                CREATE TABLE IF NOT EXISTS notas (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    nota VARCHAR(25) CHECK (LENGTH(codigo) <= 25 NOT NULL,
-                    fecha_hora DATATIME NOT NULL
+                    texto TEXT NOT NULL,
+                    fecha_hora TEXT NOT NULL
                 )
-
-                CREATE TABLE IF NOT EXISTS etiquetas(
-                id INTEGER PRIMARY KEY AUTOINCREMENT
-                NOMBRE TEXT NOT NULL UNIQUE
+                """,
+                """
+                CREATE TABLE IF NOT EXISTS tags (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    nombre TEXT NOT NULL UNIQUE
                 )
-
-                CREATE TABLE IF NOT EXISTS nota_etiquetas(
-                nota_id INTEGER
-                etiqueta_id INTEGER
-                PRIMARY KEY (nota_id, etiquetas_id)
-                FOREING KEY (nota_id) REFERENCES notas(id) ON DELETE CASCADE,
-                FOREING KEY (etiqueta_id) REFERENCES etiquetas(id) ON DELETE CASCADE
+                """,
+                """
+                CREATE TABLE IF NOT EXISTS nota_tags (
+                    nota_id INTEGER NOT NULL,
+                    tag_id INTEGER NOT NULL,
+                    PRIMARY KEY (nota_id, tag_id),
+                    FOREIGN KEY (nota_id) REFERENCES notas(id) ON DELETE CASCADE,
+                    FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
                 )
-                """;
-        
+                """
+        };
         try (Connection conn = conectar();
-        Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
+             Statement stmt = conn.createStatement()) {
+            for (String sql : crearTablas) {
+                stmt.execute(sql);
+            }
         } catch (SQLException e) {
-            throw new RuntimeException("No se pudo inicializar la base de datos", e);
-        }   
+            throw new RuntimeException("No se pudo inicializar la base de datos SQLite", e);
+        }
     }
-
 }
