@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import todo.model.NotaItem;
 
 public class NotaController {
@@ -57,7 +58,8 @@ public class NotaController {
 
     @FXML
     void actionSalir(ActionEvent event) {
-
+        Stage stage = (Stage)btnSalir.getScene().getWindow();
+        stage.close();
     }
 
 }
