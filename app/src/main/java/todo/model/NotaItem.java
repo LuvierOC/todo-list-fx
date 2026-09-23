@@ -12,8 +12,17 @@ public class NotaItem {
     private String descripcion;
     private String fechaHora;
 
+    public NotaItem(){
+
+    }
+
     public NotaItem(String nombreNota, String fechaHora){
         this(null, nombreNota, fechaHora);
+    }
+
+    public NotaItem(String nombreNota){
+        this.nombreNota = nombreNota;
+        this.tags =  new ArrayList<>();
     }
     
     public NotaItem(Long id, String nombreNota, String fechaHora) {
@@ -31,6 +40,14 @@ public class NotaItem {
         this.tags = new ArrayList<>();
     }
 
+
+    public NotaItem( String nombreNota, String tags, String descripcion, String fechaHora) {
+        this.nombreNota = nombreNota;
+        addTags(tags);
+        this.descripcion = descripcion;
+        this.fechaHora = fechaHora;
+    }
+
     public Long getId() {
         return id;
     }
@@ -42,8 +59,16 @@ public class NotaItem {
     public String getFechaHora() {
         return fechaHora;
     }
+    public void setFechaHora(String fechaHora) {
+        this.fechaHora = fechaHora;
+    }
+
     public String getNombreNota() {
         return nombreNota;
+    }
+
+    public void setNombreNota(String nombreNota) {
+        this.nombreNota = nombreNota;
     }
 
     public List<String> getTags() {
@@ -58,7 +83,8 @@ public class NotaItem {
         return descripcion;
     }
 
-    public void addTags(String cadenaTags){
+    private void addTags(String cadenaTags){
+        
         if (cadenaTags == null || cadenaTags.isEmpty()){
             return;
         }
@@ -73,18 +99,36 @@ public class NotaItem {
         }
     }
 
+    public void reemplazarTags(String cadenaTags) {
+        this.tags.clear();
+        addTags(cadenaTags);
+    }
+
     public String getCadenaTags(){
-        var listaTags = this.getTags();
-        String cadenaTags = "#";
-        for (String tag : listaTags) {
-            cadenaTags = cadenaTags + tag;
-            cadenaTags = " #" + cadenaTags;
+        var listaItem = getTags();
+        
+        if (listaItem.isEmpty()) {
+            return null;
         }
-        return cadenaTags;
+        var listaTags = listaItem;
+
+        String cadenaNueva = "#";
+
+        for (int i = 0; i < listaTags.size(); i++) {
+            cadenaNueva = cadenaNueva +listaTags.get(i) + " #";
+        }
+        var resultado = cadenaNueva.substring(0, cadenaNueva.length() -2);
+        return resultado;
     }
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    @Override
+    public String toString() {
+        return "NotaItem [id=" + id + ", nombreNota=" + nombreNota + ", tags=" + tags + ", descripcion=" + descripcion
+                + ", fechaHora=" + fechaHora + "]";
     }
 }
 
