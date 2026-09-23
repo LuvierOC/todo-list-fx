@@ -136,6 +136,7 @@ public class TodoController {
         NotaItem selectedItem = TableViewItems.getSelectionModel().getSelectedItem();
         if (selectedItem == null) {
             System.out.println("no tiene ninguna fila seleccionada");
+            return;
         }
         if (notaItemService.eliminarNota(selectedItem)) {
             
@@ -207,13 +208,6 @@ public class TodoController {
     void agregarNotaKey(KeyEvent event) {
         if(event.getCode() == KeyCode.ENTER){
             agregar();
-        }
-    }
-
-    @FXML
-    void eliminarNotaKey(KeyEvent event) {
-        if (event.getCode() == KeyCode.DELETE) {
-            eliminar();
         }
     }
 
