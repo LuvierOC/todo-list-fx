@@ -1,8 +1,11 @@
 package todo.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -62,11 +65,15 @@ public class TodoController {
         columnNombre.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombreNota()));
         columnTags.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCadenaTags()));
         
+        List<NotaItem> notasSql = notaItemService.obtenerNotas();
+        ObservableList<NotaItem> observable = FXCollections.observableArrayList(notasSql); 
+        TableViewItems.setItems(observable);
+
         txtInput.addEventFilter(KeyEvent.KEY_PRESSED, this::enfocarTableView);
         checkNota.setOnAction(this::manejarSeleccion);
         checkTag.setOnAction(this::manejarSeleccion);
 
-        TableViewItems.setOnKeyPressed(this::abrirNotaConEnter);
+        TableViewItems.setOnKeyPressed(this::manejarTecladoTableView);
     }
 
     private void manejarSeleccion(ActionEvent event){
@@ -116,18 +123,22 @@ public class TodoController {
 
     private void agregar(){
         try {
-            var nuevaNota = notaItemService.crearNota(txtInput.getText());
+            var nuevaNota = notaItemService.guardar(txtInput.getText());
             TableViewItems.getItems().add(0,nuevaNota);
             txtInput.clear();
+            System.out.println(nuevaNota.toString());
         } catch (IllegalArgumentException e) {
-
+            System.out.println(e);
         }
     }
 
     private void eliminar(){
         NotaItem selectedItem = TableViewItems.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            notaItemService.eliminarNota(selectedItem);
+        if (selectedItem == null) {
+            System.out.println("no tiene ninguna fila seleccionada");
+        }
+        if (notaItemService.eliminarNota(selectedItem)) {
+            
             TableViewItems.getItems().remove(selectedItem);
         }else{
             System.out.println("no hay ninguna nota que eliminar");
@@ -163,6 +174,10 @@ public class TodoController {
 
             // Pasarle la nota seleccionada
             controller.setNota(nota);
+
+            controller.setAlGuardar(() -> {
+                TableViewItems.refresh();
+            });
 
             // Crear nueva ventana
             Stage stage = new Stage();
@@ -201,6 +216,18 @@ public class TodoController {
             eliminar();
         }
     }
+
+    private void manejarTecladoTableView(KeyEvent event) {
+
+    if (event.getCode() == KeyCode.ENTER) {
+        abrirNotaConEnter(event);
+    }
+
+    if (event.getCode() == KeyCode.DELETE) {
+        eliminar();
+        event.consume();
+    }
+}
 
 
     @FXML

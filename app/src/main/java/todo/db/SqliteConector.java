@@ -27,7 +27,7 @@ public final class SqliteConector {
                 CREATE TABLE IF NOT EXISTS notas (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     nombre_nota TEXT NOT NULL,
-                    descripcion TEXT NOT NULL,
+                    descripcion TEXT,
                     fecha_hora TEXT NOT NULL
                 )
                 """,
