@@ -6,8 +6,8 @@ import todo.model.NotaItem;
 
 public interface INotaItemRepository {
 
-    void guardar(NotaItem nota);
+    NotaItem guardar(String nueva);
     void actualizar(NotaItem nota);
-    void eliminar(NotaItem nota);
+    boolean eliminar(NotaItem nota);
     List<NotaItem> obtenertodos();
 }

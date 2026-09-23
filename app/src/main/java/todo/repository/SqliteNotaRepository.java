@@ -20,33 +20,32 @@ public class SqliteNotaRepository implements INotaItemRepository {
     }
 
     @Override
-    public void guardar(NotaItem nota) {
-        if (nota.getId() != null) {
+    public NotaItem guardar(String nuevaNota) {
+        if (nuevaNota == null || nuevaNota.isBlank()) {
             throw new IllegalArgumentException(
-                    "No se puede actualizar una nota sin id. Usa guardar() para insertarla.");
+                    "No se puede guardar una nota sin nombre");
         }
+
+        var nota = new NotaItem(nuevaNota);
         String sql = """
                 INSERT INTO notas (nombre_nota, fecha_hora)
-                VALUES (?, ?)
+                VALUES (?, datetime('now', 'localtime'))
+                RETURNING id, fecha_hora
                 """;
         try (Connection conn = SqliteConector.conectar()) {
             conn.setAutoCommit(false);
-            long id;
-            try (PreparedStatement stmt =
-                    conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 
-                stmt.setString(1, nota.getNombreNota());
-                stmt.setString(2, nota.getFechaHora());
-                stmt.executeUpdate();
+                stmt.setString(1, nuevaNota);
 
-                try (ResultSet claves = stmt.getGeneratedKeys()) {
-                    claves.next();
-                    id = claves.getLong(1);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    nota.setId(rs.getLong("id"));
+                    nota.setFechaHora(rs.getString("fecha_hora"));
                 }
             }
-            nota.setId(id);
             guardarTags(conn, nota);
             conn.commit();
+            return nota;
         } catch (SQLException e) {
             throw new RuntimeException("Error al insertar la nota", e);
         }
@@ -58,14 +57,13 @@ public class SqliteNotaRepository implements INotaItemRepository {
             throw new IllegalArgumentException(
                     "No se puede actualizar una nota sin id. Usa guardar() para insertarla.");
         }
-        String sql = "UPDATE notas SET nombre_nota = ?, descripcion = ?, fecha_hora = ? WHERE id = ?";
+        String sql = "UPDATE notas SET nombre_nota = ?, descripcion = ?, fecha_hora = datetime('now', 'localtime') WHERE id = ?";
         try (Connection conn = SqliteConector.conectar()) {
             conn.setAutoCommit(false);
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, nota.getNombreNota());
-                stmt.setString(2, nota.getFechaHora());
-                stmt.setString(3, nota.getDescripcion());
-                stmt.setLong(4, nota.getId());
+                stmt.setString(2, nota.getDescripcion());
+                stmt.setLong(3, nota.getId());
                 stmt.executeUpdate();
             }
             // Los tags pueden haber cambiado: se desvinculan todos y se vuelven a vincular
@@ -116,9 +114,9 @@ public class SqliteNotaRepository implements INotaItemRepository {
     }
 
     @Override
-    public void eliminar(NotaItem nota) {
+    public boolean eliminar(NotaItem nota) {
         if (nota.getId() == null) {
-            return;
+            return false;
         }
         try (Connection conn = SqliteConector.conectar()) {
             conn.setAutoCommit(false);
@@ -128,11 +126,12 @@ public class SqliteNotaRepository implements INotaItemRepository {
                 stmt.setLong(1, nota.getId());
                 stmt.executeUpdate();
             }
-
+            int filasBorradas;
             String borrarNota = "DELETE FROM notas WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(borrarNota)) {
                 stmt.setLong(1, nota.getId());
-                stmt.executeUpdate();
+                filasBorradas = stmt.executeUpdate();
+
             }
 
             // Limpieza: eliminar tags que ya no quedan vinculados a ninguna nota
@@ -142,6 +141,7 @@ public class SqliteNotaRepository implements INotaItemRepository {
             }
 
             conn.commit();
+            return filasBorradas > 0 ;
         } catch (SQLException e) {
             throw new RuntimeException("Error al eliminar la nota", e);
         }
